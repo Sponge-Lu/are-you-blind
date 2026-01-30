@@ -88,17 +88,24 @@ jobs:
         with:
           path: dist
 
+      - name: Prepare release assets
+        run: |
+          mkdir dist-release
+          cp dist/eyeguard-windows/are_you_blind.exe dist-release/are_you_blind-windows.exe
+          cp dist/eyeguard-macos/are_you_blind dist-release/are_you_blind-macos
+          cp dist/eyeguard-linux/are_you_blind dist-release/are_you_blind-linux
+
       - name: Create draft GitHub release
         uses: softprops/action-gh-release@v2
         with:
           draft: true
           name: 瞎了么 ${{ github.ref_name }}
-          files: dist/**/*
+          files: dist-release/*
           body: |
             ## Downloads
 
             This release contains raw binaries built by GitHub Actions:
 
-            - Windows: `are_you_blind.exe`
-            - macOS: `are_you_blind`
-            - Linux: `are_you_blind`
+            - Windows: `are_you_blind-windows.exe`
+            - macOS: `are_you_blind-macos`
+            - Linux: `are_you_blind-linux`
