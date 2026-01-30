@@ -15,6 +15,8 @@ image = { version = "0.25", default-features = false, features = ["png"] }
 
 [build-dependencies]
 slint-build = "1.9"
+
+[target.'cfg(windows)'.build-dependencies]
 winresource = "0.1"
 
 [[bin]]

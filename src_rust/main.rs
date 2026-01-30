@@ -377,10 +377,15 @@ fn get_walk_message(rest_seconds: u64) -> (&'static str, String) {
     (*headline, template.replace("{}", &rest_seconds.to_string()))
 }
 
+#[cfg(target_os = "windows")]
 struct OverlayWindowEntry {
     window: RestOverlayWindow,
-    #[cfg(target_os = "windows")]
     monitor: MonitorRect,
+}
+
+#[cfg(not(target_os = "windows"))]
+struct OverlayWindowEntry {
+    window: RestOverlayWindow,
 }
 
 #[cfg(target_os = "windows")]

@@ -1,6 +1,8 @@
 #![allow(clippy::upper_case_acronyms)] // Windows API types use uppercase names
 
+#[cfg(target_os = "windows")]
 use std::ffi::c_void;
+#[cfg(target_os = "windows")]
 use std::mem::MaybeUninit;
 
 #[cfg(target_os = "windows")]
