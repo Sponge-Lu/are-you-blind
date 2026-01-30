@@ -1,3 +1,4 @@
-# Use MSVC target by default for prebuilt Skia binaries
-[build]
-target = "x86_64-pc-windows-msvc"
+# NOTE: Avoid setting a global build target here.
+# It breaks macOS/Linux CI by forcing the Windows MSVC target.
+# If you need MSVC on Windows, use `rustup default stable-msvc`
+# or set `CARGO_BUILD_TARGET=x86_64-pc-windows-msvc` locally.
