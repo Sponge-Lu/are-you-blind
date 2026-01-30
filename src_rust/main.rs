@@ -840,9 +840,11 @@ fn main() -> Result<(), slint::PlatformError> {
                     state.current_mode = Mode::Work;
                     hide_rest_overlay(&mut state);
 
-                    // Always show main window after rest
-                    let _ = app.window().show();
-                    state.main_window_visible = true;
+                    // Keep window minimized to tray if the user hid it.
+                    // Only restore the window if it was visible before the rest started.
+                    if state.main_window_visible {
+                        let _ = app.window().show();
+                    }
 
                     app.set_status_text("Focus Time".into());
                     app.set_time_display(format_duration_mm_ss(state.work_duration));
