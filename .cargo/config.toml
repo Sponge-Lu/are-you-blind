@@ -1,0 +1,3 @@
+# Use MSVC target by default for prebuilt Skia binaries
+[build]
+target = "x86_64-pc-windows-msvc"

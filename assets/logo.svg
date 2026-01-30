@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- 背景圆 -->
+  <circle cx="64" cy="64" r="60" fill="#1a1a1a"/>
+
+  <!-- 眼睛外轮廓 -->
+  <path d="M20 64 Q64 24 108 64 Q64 104 20 64" fill="white"/>
+
+  <!-- 虹膜 -->
+  <circle cx="64" cy="64" r="20" fill="#1a1a1a"/>
+</svg>

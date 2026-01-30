@@ -1,0 +1,23 @@
+# Rust build artifacts
+target/
+*.pdb
+
+# Editor directories and files
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# AI tools (local only)
+.claude/*
+!.claude/settings.json
+.kiro/
+.cursor/
+.kirorules
+.ace-tool/
+
+# Logs
+*.log

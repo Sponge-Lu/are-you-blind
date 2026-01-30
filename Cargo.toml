@@ -1,0 +1,26 @@
+[package]
+name = "are_you_blind"
+version = "0.1.0"
+edition = "2021"
+description = "A lightweight eye protection tool based on the 20-20-20 rule"
+license = "MIT"
+repository = "https://github.com/Sponge-Lu/are_you_blind"
+default-run = "are_you_blind"
+
+[dependencies]
+slint = { version = "1.9", default-features = false, features = ["backend-winit", "renderer-skia", "compat-1-2"] }
+tray-icon = "0.19"
+rand = "0.8"
+image = { version = "0.25", default-features = false, features = ["png"] }
+
+[build-dependencies]
+slint-build = "1.9"
+winresource = "0.1"
+
+[[bin]]
+name = "are_you_blind"
+path = "src_rust/main.rs"
+
+[[bin]]
+name = "dump_monitors"
+path = "src_rust/bin/dump_monitors.rs"

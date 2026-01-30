@@ -1,0 +1,1154 @@
+export global AppPalette {
+    in-out property <bool> dark-mode: false;
+
+    // Theme-aware colors (no transparency)
+    out property <color> background: dark-mode ? #1a1a1a : #f5f5f5;
+    out property <color> accent: #22c55e; // Modern green (same for both themes)
+    out property <color> text-primary: dark-mode ? #ffffff : #1a1a1a;
+    out property <color> text-secondary: dark-mode ? #aaaaaa : #666666;
+    out property <color> border: dark-mode ? #333333 : #e0e0e0;
+    out property <color> surface-1: dark-mode ? #2a2a2a : #ffffff;
+    out property <color> surface-2: dark-mode ? #363636 : #f0f0f0;
+    out property <color> ring-track: dark-mode ? #2f2f2f : #e5e5e5;
+    out property <length> border-radius: 18px;
+}
+
+component IconPlay inherits Rectangle {
+    in property <brush> ink: AppPalette.text-primary;
+    width: 22px;
+    height: 22px;
+    background: transparent;
+
+    Path {
+        width: 100%;
+        height: 100%;
+        fill: root.ink;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        commands: "M 7 5 L 19 12 L 7 19 Z";
+    }
+}
+
+component IconPause inherits Rectangle {
+    in property <brush> ink: AppPalette.text-primary;
+    width: 22px;
+    height: 22px;
+    background: transparent;
+
+    Rectangle {
+        x: 7px;
+        y: 5px;
+        width: 4px;
+        height: 14px;
+        background: root.ink;
+        border-radius: 2px;
+    }
+
+    Rectangle {
+        x: 13px;
+        y: 5px;
+        width: 4px;
+        height: 14px;
+        background: root.ink;
+        border-radius: 2px;
+    }
+}
+
+component IconReset inherits Rectangle {
+    in property <brush> ink: AppPalette.text-primary;
+    width: 22px;
+    height: 22px;
+    background: transparent;
+
+    Path {
+        width: 100%;
+        height: 100%;
+        fill: root.ink;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        // Circular arrow (reset icon)
+        commands: "M 12 4 L 12 1 L 8 5 L 12 9 L 12 6 A 6 6 0 1 1 6 12 L 4 12 A 8 8 0 1 0 12 4 Z";
+    }
+}
+
+component IconSun inherits Rectangle {
+    in property <brush> ink: AppPalette.text-primary;
+    width: 18px;
+    height: 18px;
+    background: transparent;
+
+    Path {
+        width: 100%;
+        height: 100%;
+        stroke: root.ink;
+        stroke-width: 2px;
+        stroke-line-cap: round;
+        fill: transparent;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        // Sun icon: circle with rays
+        commands: "M12 7a5 5 0 100 10 5 5 0 000-10zM12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42";
+    }
+}
+
+component IconMoon inherits Rectangle {
+    in property <brush> ink: AppPalette.text-primary;
+    width: 18px;
+    height: 18px;
+    background: transparent;
+
+    Path {
+        width: 100%;
+        height: 100%;
+        fill: root.ink;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        // Crescent moon icon
+        commands: "M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z";
+    }
+}
+
+component IconSettings inherits Rectangle {
+    in property <brush> ink: AppPalette.text-primary;
+    width: 18px;
+    height: 18px;
+    background: transparent;
+
+    Path {
+        width: 100%;
+        height: 100%;
+        stroke: root.ink;
+        stroke-width: 2px;
+        stroke-line-cap: round;
+        fill: transparent;
+        viewbox-width: 24;
+        viewbox-height: 24;
+        // Sliders icon
+        commands: "M4 6h16 M4 12h16 M4 18h16 M6 6a2 2 0 104 0a2 2 0 10-4 0 M12 12a2 2 0 104 0a2 2 0 10-4 0 M16 18a2 2 0 104 0a2 2 0 10-4 0";
+    }
+}
+
+export component RestOverlayWindow inherits Window {
+    title: "瞎了么";
+    no-frame: true;
+    always-on-top: true;
+    background: #000000;
+    default-font-family: "Microsoft YaHei";
+
+    in property <string> headline: "休息一下";
+    in property <string> message: "请看向远处 20 秒（20-20-20）";
+    in property <string> countdown: "00:20";
+
+    Rectangle {
+        width: 100%;
+        height: 100%;
+        background: #000000;
+
+        // Capture input so clicks don't fall through.
+        TouchArea {
+            width: 100%;
+            height: 100%;
+        }
+
+        VerticalLayout {
+            width: 100%;
+            height: 100%;
+            alignment: center;
+            spacing: 12px;
+
+            Text {
+                text: root.headline;
+                font-size: 36px;
+                font-weight: 700;
+                color: #ffffff;
+                horizontal-alignment: center;
+            }
+
+            Text {
+                text: root.message;
+                font-size: 18px;
+                font-weight: 500;
+                color: #cfcfcf;
+                horizontal-alignment: center;
+            }
+
+            Text {
+                text: root.countdown;
+                font-size: 56px;
+                font-weight: 700;
+                font-family: "Consolas";
+                color: #ffffff;
+                horizontal-alignment: center;
+            }
+        }
+    }
+}
+
+export component MainWindow inherits Window {
+    title: "瞎了么";
+    no-frame: true;
+    background: transparent;
+    always-on-top: true;
+    default-font-family: "Microsoft YaHei";
+    width: 300px;
+    height: 400px;
+
+    property <length> header-height: 44px;
+
+    // Callbacks to Rust
+    callback toggle-timer();
+    callback secondary-action();
+    callback open-settings();
+    callback apply-work-minutes(minutes: int);
+    callback apply-rest-seconds(seconds: int);
+    callback apply-water-interval(interval: int);
+    callback apply-walk-interval(interval: int);
+    callback minimize-to-tray();
+    callback start-window-drag(position: Point);
+    callback update-window-drag(position: Point);
+    callback end-window-drag();
+
+    // Properties from Rust
+    in property <string> time-display: "20:00";
+    in property <float> progress: 1.0;
+    in property <string> status-text: "Focus Time";
+    in property <bool> is-paused: false;
+    in-out property <int> work-minutes: 20;
+    in-out property <int> rest-seconds: 20;
+    in-out property <int> water-interval: 2;  // 每几轮护眼提醒后喝水提醒
+    in-out property <int> walk-interval: 3;   // 每几轮护眼提醒后走动提醒
+
+    // UI state
+    in-out property <bool> settings-open: false;
+    property <int> work-minutes-draft: work-minutes;
+    property <int> rest-seconds-draft: rest-seconds;
+    property <int> water-interval-draft: water-interval;
+    property <int> walk-interval-draft: walk-interval;
+
+    Rectangle {
+        background: AppPalette.background;
+        border-radius: AppPalette.border-radius;
+        border-width: 1px;
+        border-color: AppPalette.border;
+        clip: true;
+        width: 100%;
+        height: 100%;
+
+        // Header / Drag area
+        TouchArea {
+            x: 0px;
+            y: 0px;
+            width: 100%;
+            height: root.header-height;
+
+                pointer-event(event) => {
+                    if (event.kind == PointerEventKind.down && event.button == PointerEventButton.left) {
+                        root.start-window-drag({
+                            x: self.absolute-position.x + self.mouse-x - root.absolute-position.x,
+                            y: self.absolute-position.y + self.mouse-y - root.absolute-position.y,
+                        });
+                    } else if (event.kind == PointerEventKind.up) {
+                        root.end-window-drag();
+                    }
+                }
+
+                moved => {
+                    root.update-window-drag({
+                        x: self.absolute-position.x + self.mouse-x - root.absolute-position.x,
+                        y: self.absolute-position.y + self.mouse-y - root.absolute-position.y,
+                    });
+                }
+
+                HorizontalLayout {
+                    width: 100%;
+                    height: 100%;
+                    padding-left: 16px;
+                    padding-right: 2px;
+                    alignment: space-between;
+
+                    Text {
+                        text: "瞎了么";
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: AppPalette.text-secondary;
+                        vertical-alignment: center;
+                    }
+
+                    // Right side buttons
+                    HorizontalLayout {
+                        alignment: center;
+                        spacing: 8px;
+                        height: 100%;
+
+                        close_btn := Rectangle {
+                            width: 36px;
+                            height: 36px;
+                            border-radius: 18px;
+
+                            close_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => { root.minimize-to-tray() }
+                            }
+
+                            background: close_ta.pressed
+                                ? (AppPalette.dark-mode ? #4a4a4a : #d0d0d0)
+                                : (close_ta.has-hover
+                                    ? (AppPalette.dark-mode ? #3a3a3a : #e0e0e0)
+                                    : transparent);
+
+                            Text {
+                                width: 100%;
+                                height: 100%;
+                                text: "×";
+                                font-size: 20px;
+                                font-weight: 700;
+                                color: AppPalette.text-secondary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                    }
+                }
+            }
+
+        // Content
+        VerticalLayout {
+            x: 0px;
+            y: root.header-height;
+            width: 100%;
+            height: parent.height - root.header-height;
+
+                padding-top: 26px;
+                padding-bottom: 26px;
+                spacing: 22px;
+                alignment: center;
+
+                HorizontalLayout {
+                    width: 100%;
+                    horizontal-stretch: 1;
+                    alignment: center;
+
+                    ring := Rectangle {
+                        width: 220px;
+                        height: 220px;
+
+                        property <float> p: Math.clamp(root.progress, 0.0, 1.0);
+                        property <angle> end-angle: (-90deg) + (ring.p * 360deg);
+                        property <float> cx: 100;
+                        property <float> cy: 100;
+                        property <float> r: 90;
+                        property <float> end-x: ring.cx + (ring.r * ring.end-angle.cos());
+                        property <float> end-y: ring.cy + (ring.r * ring.end-angle.sin());
+
+                        // Background track
+                        Path {
+                            width: 100%;
+                            height: 100%;
+                            stroke: AppPalette.ring-track;
+                            stroke-width: 8px;
+                            stroke-line-cap: round;
+                            fill: transparent;
+                            viewbox-width: 200;
+                            viewbox-height: 200;
+                            MoveTo { x: ring.cx; y: ring.cy - ring.r; }
+                            ArcTo {
+                                x: ring.cx;
+                                y: ring.cy + ring.r;
+                                radius-x: ring.r;
+                                radius-y: ring.r;
+                                x-rotation: 0;
+                                large_arc: false;
+                                sweep: true;
+                            }
+                            ArcTo {
+                                x: ring.cx;
+                                y: ring.cy - ring.r;
+                                radius-x: ring.r;
+                                radius-y: ring.r;
+                                x-rotation: 0;
+                                large_arc: false;
+                                sweep: true;
+                            }
+                        }
+
+                        // Progress arc - avoid zero-length segment to prevent cap flicker
+                        Path {
+                            visible: ring.p > 0.0 && ring.p <= 0.5;
+                            width: 100%;
+                            height: 100%;
+                            stroke: AppPalette.accent;
+                            stroke-width: 10px;
+                            stroke-line-cap: round;
+                            fill: transparent;
+                            viewbox-width: 200;
+                            viewbox-height: 200;
+                            MoveTo { x: ring.cx; y: ring.cy - ring.r; }
+                            ArcTo {
+                                x: ring.end-x;
+                                y: ring.end-y;
+                                radius-x: ring.r;
+                                radius-y: ring.r;
+                                x-rotation: 0;
+                                large_arc: false;
+                                sweep: true;
+                            }
+                        }
+
+                        Path {
+                            visible: ring.p > 0.5;
+                            width: 100%;
+                            height: 100%;
+                            stroke: AppPalette.accent;
+                            stroke-width: 10px;
+                            stroke-line-cap: round;
+                            fill: transparent;
+                            viewbox-width: 200;
+                            viewbox-height: 200;
+                            MoveTo { x: ring.cx; y: ring.cy - ring.r; }
+                            ArcTo {
+                                x: ring.cx;
+                                y: ring.cy + ring.r;
+                                radius-x: ring.r;
+                                radius-y: ring.r;
+                                x-rotation: 0;
+                                large_arc: false;
+                                sweep: true;
+                            }
+                            ArcTo {
+                                x: ring.end-x;
+                                y: ring.end-y;
+                                radius-x: ring.r;
+                                radius-y: ring.r;
+                                x-rotation: 0;
+                                large_arc: false;
+                                sweep: true;
+                            }
+                        }
+
+                        // Centered text group (visual center, not geometric)
+                        VerticalLayout {
+                            width: 100%;
+                            height: 100%;
+                            alignment: center;
+                            spacing: 2px;
+                            padding-top: 14px; // Optical adjustment for heavy digits
+
+                            Text {
+                            text: root.time-display;
+                            font-size: 56px;
+                            font-weight: 700;
+                            font-family: "Consolas";
+                            color: AppPalette.text-primary;
+                            horizontal-alignment: center;
+                            letter-spacing: 0px;
+                        }
+
+                            Text {
+                                text: root.status-text;
+                                font-size: 14px;
+                                font-weight: 500;
+                                color: AppPalette.text-secondary;
+                                horizontal-alignment: center;
+                            }
+                        }
+                    }
+                }
+
+                HorizontalLayout {
+                    width: 100%;
+                    horizontal-stretch: 1;
+                    alignment: center;
+                    spacing: 24px;
+                    height: 56px;
+
+                    // Primary button: Play/Pause (primary)
+                    VerticalLayout {
+                        alignment: center;
+                        Rectangle {
+                            width: 56px;
+                            height: 56px;
+                            border-radius: 28px;
+                            border-width: 1px;
+                            border-color: #00000044;
+
+                            property <color> base: root.is-paused
+                                ? AppPalette.accent
+                                : AppPalette.accent.darker(0.12);
+
+                            primary_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => { root.toggle-timer() }
+                            }
+
+                            background: primary_ta.pressed
+                                ? self.base.darker(0.12)
+                                : (primary_ta.has_hover ? self.base.brighter(0.08) : self.base);
+
+                            IconPause {
+                                visible: !root.is-paused;
+                                x: (parent.width - self.width) / 2;
+                                y: (parent.height - self.height) / 2;
+                                ink: white;
+                            }
+
+                            IconPlay {
+                                visible: root.is-paused;
+                                x: (parent.width - self.width) / 2 + 1px;
+                                y: (parent.height - self.height) / 2;
+                                ink: white;
+                            }
+                        }
+                    }
+
+                    // Reset button
+                    VerticalLayout {
+                        alignment: center;
+                        Rectangle {
+                            width: 56px;
+                            height: 56px;
+                            border-radius: 28px;
+                            reset_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => { root.secondary-action() }
+                            }
+
+                            border-width: 1px;
+                            border-color: reset_ta.has_hover ? #4a4a4a : AppPalette.border;
+
+                            background: reset_ta.pressed
+                                ? AppPalette.surface-1.darker(0.08)
+                                : (reset_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            IconReset {
+                                x: (parent.width - self.width) / 2;
+                                y: (parent.height - self.height) / 2;
+                                ink: AppPalette.text-secondary;
+                            }
+                        }
+                    }
+                }
+        }
+
+        // Settings button (symmetric to theme toggle)
+        settings_btn := Rectangle {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+
+            x: 16px + (36px - self.width) / 2;
+            y: root.header-height + 4px;
+
+            settings_ta := TouchArea {
+                mouse-cursor: pointer;
+                clicked => {
+                    root.work-minutes-draft = root.work-minutes;
+                    root.rest-seconds-draft = root.rest-seconds;
+                    root.water-interval-draft = root.water-interval;
+                    root.walk-interval-draft = root.walk-interval;
+                    root.settings-open = true;
+                }
+            }
+
+            background: settings_ta.pressed
+                ? (AppPalette.dark-mode ? #4a4a4a : #d0d0d0)
+                : (settings_ta.has-hover
+                    ? (AppPalette.dark-mode ? #3a3a3a : #e0e0e0)
+                    : transparent);
+
+            IconSettings {
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                ink: AppPalette.text-secondary;
+            }
+        }
+
+        // Theme toggle (place below header, matching the red-box position)
+        theme_btn := Rectangle {
+            width: 32px;
+            height: 32px;
+            border-radius: 16px;
+
+            // Under the close button (aligned horizontally)
+            x: parent.width - 12px - 40px + (36px - self.width) / 2;
+            y: root.header-height + 4px;
+
+            theme_ta := TouchArea {
+                mouse-cursor: pointer;
+                clicked => { AppPalette.dark-mode = !AppPalette.dark-mode }
+            }
+
+            background: theme_ta.pressed
+                ? (AppPalette.dark-mode ? #4a4a4a : #d0d0d0)
+                : (theme_ta.has-hover
+                    ? (AppPalette.dark-mode ? #3a3a3a : #e0e0e0)
+                    : transparent);
+
+            IconSun {
+                visible: AppPalette.dark-mode;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                ink: AppPalette.text-secondary;
+            }
+
+            IconMoon {
+                visible: !AppPalette.dark-mode;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                ink: AppPalette.text-secondary;
+            }
+        }
+
+        // Settings modal
+        settings_modal := Rectangle {
+            visible: root.settings-open;
+            width: 100%;
+            height: 100%;
+            background: #00000088;
+
+            // Block clicks to content behind
+            TouchArea {
+                width: 100%;
+                height: 100%;
+                clicked => { root.settings-open = false; }
+            }
+
+            panel := Rectangle {
+                width: 280px;
+                height: 280px;
+                x: (parent.width - self.width) / 2;
+                y: (parent.height - self.height) / 2;
+                background: AppPalette.surface-1;
+                border-radius: 16px;
+                border-width: 1px;
+                border-color: AppPalette.border;
+
+                // Block clicks inside panel
+                TouchArea {
+                    width: 100%;
+                    height: 100%;
+                }
+
+                VerticalLayout {
+                    width: 100%;
+                    height: 100%;
+                    padding: 16px;
+                    spacing: 12px;
+                    alignment: start;
+
+                    Text {
+                        text: "设置";
+                        font-size: 16px;
+                        font-weight: 700;
+                        color: AppPalette.text-primary;
+                        horizontal-alignment: center;
+                    }
+
+                    // 护眼提醒
+                    HorizontalLayout {
+                        spacing: 8px;
+                        alignment: center;
+
+                        Text {
+                            text: "护眼提醒";
+                            font-size: 13px;
+                            color: AppPalette.text-primary;
+                            vertical-alignment: center;
+                            width: 70px;
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            work_minus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.work-minutes-draft > 1) { root.work-minutes-draft -= 1; }
+                                }
+                            }
+
+                            background: work_minus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (work_minus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "−";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Rectangle {
+                            width: 56px;
+                            height: 28px;
+                            border-radius: 6px;
+                            background: AppPalette.surface-2;
+                            border-width: 1px;
+                            border-color: work_input.has-focus ? AppPalette.accent : AppPalette.border;
+
+                            work_input := TextInput {
+                                width: parent.width - 8px;
+                                height: parent.height;
+                                x: 4px;
+                                text: root.work-minutes-draft;
+                                font-size: 14px;
+                                font-weight: 700;
+                                font-family: "Consolas";
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                                input-type: number;
+
+                                edited => {
+                                    if (self.text != "") {
+                                        root.work-minutes-draft = max(1, min(180, self.text.to-float()));
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            work_plus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.work-minutes-draft < 180) { root.work-minutes-draft += 1; }
+                                }
+                            }
+
+                            background: work_plus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (work_plus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "+";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: "分钟";
+                            font-size: 12px;
+                            color: AppPalette.text-secondary;
+                            vertical-alignment: center;
+                            width: 36px;
+                        }
+                    }
+
+                    // 喝水提醒
+                    HorizontalLayout {
+                        spacing: 8px;
+                        alignment: center;
+
+                        Text {
+                            text: "喝水提醒";
+                            font-size: 13px;
+                            color: AppPalette.text-primary;
+                            vertical-alignment: center;
+                            width: 70px;
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            water_minus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.water-interval-draft > 1) { root.water-interval-draft -= 1; }
+                                }
+                            }
+
+                            background: water_minus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (water_minus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "−";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Rectangle {
+                            width: 56px;
+                            height: 28px;
+                            border-radius: 6px;
+                            background: AppPalette.surface-2;
+                            border-width: 1px;
+                            border-color: water_input.has-focus ? AppPalette.accent : AppPalette.border;
+
+                            water_input := TextInput {
+                                width: parent.width - 8px;
+                                height: parent.height;
+                                x: 4px;
+                                text: root.water-interval-draft;
+                                font-size: 14px;
+                                font-weight: 700;
+                                font-family: "Consolas";
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                                input-type: number;
+
+                                edited => {
+                                    if (self.text != "") {
+                                        root.water-interval-draft = max(1, min(20, self.text.to-float()));
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            water_plus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.water-interval-draft < 20) { root.water-interval-draft += 1; }
+                                }
+                            }
+
+                            background: water_plus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (water_plus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "+";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: "轮间隔";
+                            font-size: 12px;
+                            color: AppPalette.text-secondary;
+                            vertical-alignment: center;
+                            width: 36px;
+                        }
+                    }
+
+                    // 走动提醒
+                    HorizontalLayout {
+                        spacing: 8px;
+                        alignment: center;
+
+                        Text {
+                            text: "走动提醒";
+                            font-size: 13px;
+                            color: AppPalette.text-primary;
+                            vertical-alignment: center;
+                            width: 70px;
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            walk_minus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.walk-interval-draft > 1) { root.walk-interval-draft -= 1; }
+                                }
+                            }
+
+                            background: walk_minus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (walk_minus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "−";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Rectangle {
+                            width: 56px;
+                            height: 28px;
+                            border-radius: 6px;
+                            background: AppPalette.surface-2;
+                            border-width: 1px;
+                            border-color: walk_input.has-focus ? AppPalette.accent : AppPalette.border;
+
+                            walk_input := TextInput {
+                                width: parent.width - 8px;
+                                height: parent.height;
+                                x: 4px;
+                                text: root.walk-interval-draft;
+                                font-size: 14px;
+                                font-weight: 700;
+                                font-family: "Consolas";
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                                input-type: number;
+
+                                edited => {
+                                    if (self.text != "") {
+                                        root.walk-interval-draft = max(1, min(20, self.text.to-float()));
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            walk_plus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.walk-interval-draft < 20) { root.walk-interval-draft += 1; }
+                                }
+                            }
+
+                            background: walk_plus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (walk_plus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "+";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: "轮间隔";
+                            font-size: 12px;
+                            color: AppPalette.text-secondary;
+                            vertical-alignment: center;
+                            width: 36px;
+                        }
+                    }
+
+                    // 休息时长
+                    HorizontalLayout {
+                        spacing: 8px;
+                        alignment: center;
+
+                        Text {
+                            text: "休息时长";
+                            font-size: 13px;
+                            color: AppPalette.text-primary;
+                            vertical-alignment: center;
+                            width: 70px;
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            rest_minus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.rest-seconds-draft > 5) { root.rest-seconds-draft -= 5; }
+                                }
+                            }
+
+                            background: rest_minus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (rest_minus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "−";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Rectangle {
+                            width: 56px;
+                            height: 28px;
+                            border-radius: 6px;
+                            background: AppPalette.surface-2;
+                            border-width: 1px;
+                            border-color: rest_input.has-focus ? AppPalette.accent : AppPalette.border;
+
+                            rest_input := TextInput {
+                                width: parent.width - 8px;
+                                height: parent.height;
+                                x: 4px;
+                                text: root.rest-seconds-draft;
+                                font-size: 14px;
+                                font-weight: 700;
+                                font-family: "Consolas";
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                                input-type: number;
+
+                                edited => {
+                                    if (self.text != "") {
+                                        root.rest-seconds-draft = max(5, min(300, self.text.to-float()));
+                                    }
+                                }
+                            }
+                        }
+
+                        Rectangle {
+                            width: 28px;
+                            height: 28px;
+                            border-radius: 14px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            rest_plus_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    if (root.rest-seconds-draft < 300) { root.rest-seconds-draft += 5; }
+                                }
+                            }
+
+                            background: rest_plus_ta.pressed
+                                ? AppPalette.surface-1.darker(0.12)
+                                : (rest_plus_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "+";
+                                font-size: 16px;
+                                font-weight: 700;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Text {
+                            text: "秒";
+                            font-size: 12px;
+                            color: AppPalette.text-secondary;
+                            vertical-alignment: center;
+                            width: 36px;
+                        }
+                    }
+
+                    // Buttons
+                    HorizontalLayout {
+                        spacing: 12px;
+                        alignment: center;
+                        padding-top: 4px;
+
+                        Rectangle {
+                            width: 80px;
+                            height: 32px;
+                            border-radius: 16px;
+                            border-width: 1px;
+                            border-color: AppPalette.border;
+
+                            cancel_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => { root.settings-open = false; }
+                            }
+
+                            background: cancel_ta.pressed
+                                ? AppPalette.surface-1.darker(0.08)
+                                : (cancel_ta.has_hover ? AppPalette.surface-2 : AppPalette.surface-1);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "取消";
+                                font-size: 13px;
+                                font-weight: 600;
+                                color: AppPalette.text-primary;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+
+                        Rectangle {
+                            width: 80px;
+                            height: 32px;
+                            border-radius: 16px;
+
+                            ok_ta := TouchArea {
+                                mouse-cursor: pointer;
+                                clicked => {
+                                    root.work-minutes = root.work-minutes-draft;
+                                    root.rest-seconds = root.rest-seconds-draft;
+                                    root.water-interval = root.water-interval-draft;
+                                    root.walk-interval = root.walk-interval-draft;
+                                    root.apply-work-minutes(root.work-minutes-draft);
+                                    root.apply-rest-seconds(root.rest-seconds-draft);
+                                    root.apply-water-interval(root.water-interval-draft);
+                                    root.apply-walk-interval(root.walk-interval-draft);
+                                    root.settings-open = false;
+                                }
+                            }
+
+                            background: ok_ta.pressed
+                                ? AppPalette.accent.darker(0.12)
+                                : (ok_ta.has_hover ? AppPalette.accent.brighter(0.08) : AppPalette.accent);
+
+                            Text {
+                                width: 100%; height: 100%;
+                                text: "确定";
+                                font-size: 13px;
+                                font-weight: 700;
+                                color: white;
+                                horizontal-alignment: center;
+                                vertical-alignment: center;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
